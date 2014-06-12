@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>MagicApp</title>
+    <meta name="description" content="">
+    <meta name="author" content="Obee">
+
+    <!-- http://davidbcalhoun.com/2010/viewport-metatag -->
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!--// CSS FILES //-->
+    <link rel="stylesheet" href="/static/css/master-css.min.css">
+    {#	<link rel="stylesheet" href="/static/css/uniform.default.css?v=1">#}
+    <link rel="stylesheet" type="text/css" href="/static/css/MagicApp.css">
+    <link rel="stylesheet" id="switch-width" href="/static/css/full-width.css">
+
+    <link rel="shortcut icon" href="/static/img/favicons/favicon.ico">
+
+    <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+    <script src="/static/js/libs/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="static/js/libs/jquery.min.js"><\/script>')</script>
+    <!-- OPTIONAL: Use this migrate script for plugins that are not supported by jquery 1.9+ -->
+    <!-- DISABLED <script src="js/libs/jquery.migrate-1.0.0.min.js"></script> -->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>-->
+    <script>window.jQuery.ui || document.write('<script src="/static/js/libs/jQuery/1-9-2/jquery-ui.min.js"><\/script>')</script>
+
+    <!-- Autocomplete script -->
+    <script src="/static/js/jquery.autocomplete.js"></script>
+
+    {% block head %}
+    {% endblock %}
+</head>
+
+  <body>
+  	<!-- .height-wrapper -->
+	<div class="height-wrapper">
+		
+		<!-- header -->
+		<header>
+			<!-- tool bar -->
+			<div id="header-toolbar" class="container-fluid">
+				<!-- .contained -->
+				<div class="contained">
+					
+					<!-- theme name -->
+					<h1> MagicApp <span class="hidden-phone">- Deck building application</span> </h1>
+					<!-- end theme name -->
+
+{#                    <div class="my-profile">#}
+{#						<a href="javascript:void(0)" class="my-profile-pic">#}
+{#							<img src="{{ user.profilePictureUrl() }}" width="25" height="25" alt="">#}
+{#						</a>#}
+{#						<span class="first-child">Welcome <strong>{{ user.username }}!</strong></span>#}
+{#						<span><a href="javascript:void(0);">Edit Profile </a></span>#}
+{#					</div>#}
+
+					<!-- span4 -->
+					<div class="pull-right">
+						<!-- demo theme switcher-->
+						<div id="theme-switcher" class="btn-toolbar">
+
+							<!-- dropdown mini-inbox-->
+							<div class="btn-group">
+								<!-- new mail ticker -->
+								<a href="javascript:void(0)" class="btn btn-small btn-inverse dropdown-toggle" data-toggle="dropdown">
+									<span class="mail-sticker">3</span>
+									<i class="cus-email"></i>
+								</a>
+                                <a href="/logout" class="btn btn-small btn-inverse dropdown-toggle">
+                                    Logout
+								</a>
+							</div>
+							<!-- end theme dropdown-->
+							
+						</div>
+					  	<!-- end demo theme switcher-->
+					</div>
+					<!-- end span4 -->
+				</div>
+				<!-- end .contained -->
+			</div>
+			<!-- end tool bar -->
+			
+		</header>
+		<!-- end header -->
+		
+	    <div id="main" role="main" class="container-fluid">
+	    	
+			<div class="contained">
+				<!-- aside -->	
+				<aside>	
+					
+					<!-- search box -->
+					<div class="main-search">
+						<label for="main-search"><i class="icon-search"></i></label>
+	                    <input id="main-search" type="text" placeholder="Search users...">
+                	</div>
+					<div class="divider"></div>
+					<!-- end search box -->
+										
+					<!-- aside item: Mini profile -->
+					<div class="my-profile">
+						<a href="javascript:void(0)" class="my-profile-pic">
+							<img src="{{user.profilePictureUrl()}}" alt="" />
+						</a>
+						<span class="first-child">Welcome <strong>{{user.username}}!</strong></span>
+						<span><a href="javascript:void(0);">Edit Profile </a></span>
+					</div>
+					<div class="divider"></div>
+					<!-- end aside item: Mini profile -->
+
+                    {% if page not in ['classify'] %}
+					<!-- aside item: Menu -->
+					<div class="sidebar-nav-fixed">
+						
+						<ul class="menu" id="accordion-menu-js">
+							<li class="">
+								<a href="javascript:void(0)"><i class="icon-user"></i>Decks<span class="badge">{{ profile_user.get_decks_count() }}</span></a>
+								<ul>
+                                    {% for deck in profile_user.get_decks() %}
+									<li>
+										<a href="/{{ user.username }}/deck/{{ deck }}">{{ deck }}</a>
+									</li>
+                                    {% endfor %}
+								</ul>
+							</li>
+							<li class="{%if page == 'deck'%}current{% endif %}">
+								<a href="/"><i class="icon-off"></i>Deck</a>
+							</li>
+							<li class="{%if page == 'myCards'%}current{% endif %}">
+								<a href="/myCards"><i class="icon-envelope"></i>My Cards</a>
+							</li>
+							<li class="{%if page == 'otherCards'%}current{% endif %}">
+								<a href="/otherCards"><i class="icon-check"></i>Other Cards</a>
+							</li>
+						</ul>
+						
+					</div>
+					<div class="divider"></div>
+					<!-- end aside item: Menu -->
+                    {% endif %}
+				</aside>
+				<!-- aside end -->
+                {% include 'snippets/message-box.html' with context %}
+
+				<!-- main content -->
+				<div id="page-content" style="padding: 0px; height: 600px" >
+					<!-- page header -->
+                    {% block content %}{% endblock %}
+				</div>
+				<!-- end main content -->
+			
+				<!-- aside right on high res -->
+				<aside class="right">
+                    {% block right %}{% endblock %}
+				</aside>
+				
+				<!-- end aside right -->
+			</div>
+			
+	    </div><!--end fluid-container-->
+		<div class="push"></div>
+
+        <img src="" style="display:none" id="imageView">
+
+        <form id="defaultForm" method='post'></form>
+        {% include 'snippets/modal-window.html' with context %}
+	</div>
+	<!-- end .height wrapper -->
+	
+	<!-- footer -->
+	
+	<!-- if you like you can insert your footer here -->
+	
+	<!-- end footer -->
+
+    <!--================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <!-- REQUIRED: Mobile responsive menu generator -->
+	<script src="/static/js/include/selectnav.min.js"></script>
+
+	<!-- REQUIRED: Datatable components -->
+    <script src="/static/js/include/jquery.accordion.min.js"></script>
+
+	<!-- REQUIRED: Toastr & Jgrowl notifications  -->
+    <script src="/static/js/include/toastr.min.js"></script>
+    <script src="/static/js/include/jquery.jgrowl.min.js"></script>
+
+    <!-- REQUIRED: Sleek scroll UI  -->
+    <script src="/static/js/include/slimScroll.min.js"></script>
+
+	<!-- REQUIRED: Datatable components -->
+	<script src="/static/js/include/jquery.dataTables.min.js"></script>
+	<script src="/static/js/include/DT_bootstrap.min.js"></script>
+
+    <!-- REQUIRED: Form element skin  -->
+    <script src="/static/js/include/jquery.uniform.min.js"></script>
+
+    <!-- REQUIRED: Functional Widgets -->
+    <script src="/static/js/include/jarvis.widget.min.js"></script>
+
+    <!-- REQUIRED: Bootstrap Prompt -->
+    <script src="/static/js/include/bootbox.min.js"></script>
+
+    <!-- REQUIRED: Bootstrap engine -->
+    <script src="/static/js/include/bootstrap.min.js"></script>
+    <script src="/static/js/include/bootstrap.min.js"></script>
+
+    <!-- DO NOT REMOVE: Theme Config file -->
+    <script src="/static/js/config.js"></script>
+    <script src="/static/js/MagicApp.js"></script>
+
+    {% block script %}
+    {% endblock %}
+    <!-- end scripts -->
+
+  </body>
+</html>

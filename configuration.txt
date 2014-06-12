@@ -1,0 +1,5 @@
+[Mongo]
+URI = mongodb://obee88:obiosam1@paulo.mongohq.com:10046/Magic
+DBname = Magic2
+username = Obee
+password = obiosam

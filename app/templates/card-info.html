@@ -1,0 +1,101 @@
+{% extends "master.html" %}
+{% block content %}
+
+    <ul class="breadcrumb">
+        <li>
+            <a href="javascript:void(0);"><i class="icon-off"></i> card-info </a><span class="divider">/</span>
+        </li>
+        <li>
+            <a href="javascript:void(0);">{{ card_name }}</a><span class="divider">/</span>
+        </li>
+    </ul>
+
+    <div class="fluid-container">
+
+        <section style="padding: 10px">
+
+            {% for info in infos %}
+
+            <div class="row-fluid" >
+                <div class="span12">
+                <!-- new widget -->
+                    <div class="jarviswidget jarviswidget-sortable navyblue" id="widget-id-0" style="position: relative; opacity: 1;">
+                        <header>
+                            <h2>{{ info.edition }}</h2>
+                            <div class="jarviswidget-ctrls" role="menu">
+                            </div>
+                            <span class="jarviswidget-loader" style="display: none;">
+                            </span>
+                        </header>
+                        <!-- wrap div -->
+                        <div role="content" style="display: block;background-image: url('/static/img/backgrounds/pozz.jpg'); padding: 25px ">
+
+                            <div class="inner-spacer">
+                                <div class="row-fluid">
+                                    <div class="span4">
+                                        <img src="{{ info.get_image_url() }}">
+                                    </div>
+                                    <div class="span8">
+                                        <h1>{{ info.name }}</h1>
+                                        <h3 style="color: #606060">{{ info.rarity }} {{ info.type }}</h3>
+{#                                        <h2 style="color: #6622BB">Rarity : {{ info.rarity }}</h2>#}
+                                        <h4>{{ info.text }}</h4>
+                                        <div class="well" style="margin-top:20px;margin-right: 10%">
+                                            <span><strong>Interested:</strong></span>
+                                            <span style="display: inline">
+                                                {% for name in info.get_interested() %}
+                                                <span class="badge badge-success special">{{ name }}</span>
+                                                {% endfor %}
+                                            </span>
+                                        </div>
+                                        <div class="well" style="margin-top:20px;margin-right: 10%">
+                                            <span><strong>Hate:</strong></span>
+                                            <span style="display: inline">
+                                                {% for name in info.get_haters() %}
+                                                <span class="badge badge-important special">{{ name }}</span>
+                                                {% endfor %}
+                                            </span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end content-->
+                        </div>
+                        <!-- end wrap div -->
+                    </div>
+
+                </div>
+            </div>
+            <!-- end row-fluid -->
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}
+
+{% block right %}
+
+        <div class="divider"></div>
+
+        <div class="aside-buttons" id="deckBtns">
+{#            {% for deck in user.get_decks() %}#}
+{#                <button id="{{ deck }}Btn" onclick="deckBtnClicked(this)" title="" class="btn btn-info">{{ deck }}</button>#}
+{#            {% endfor %}#}
+        </div>
+
+        <div class="divider"></div>
+{##}
+{#        <div class="aside-buttons">#}
+{#            <button onclick="tradeBtnClicked(this)"title="" class="btn btn-warning special">Trade</button>#}
+{#            <button onclick="recycleBtnClicked(this)"title="" class="btn btn-danger special">Recyce</button>#}
+{#        </div>#}
+{##}
+{#        <div class="divider"></div>#}
+{##}
+{#        <dit class="aside-buttons">#}
+{#            <button id="okBtn" onclick="okButtonClicked()"  title="" class="btn btn-success specal hidden">OK</button>#}
+{#        </dit>#}
+{##}
+
+
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends "master.html" %}
+{% block content %}
+
+    <ul class="breadcrumb">
+        <li>
+            <a href="javascript:void(0);"><i class="icon-off"></i> Dashboard</a><span class="divider">/</span>
+        </li>
+        <li>
+            <a href="javascript:void(0);">Library</a><span class="divider">/</span>
+        </li>
+        <li class="active">
+            Current Page
+        </li>
+    </ul>
+
+    <style>
+        .cardlist-name{
+            margin-bottom: 0px;
+        }
+        .cardlist-column{
+            text-align: left;
+            padding: 10px;
+        }
+    </style>
+    <div class="text-center">
+        <div class="row-fluid">
+            <div class="span9">
+                <div class="row-fluid" style="border-right:solid 1px">
+                    {% for column in deck.get_view() %}
+                    <span class="cardlist-column span4">
+                        <div class="row-fluid">
+                            <span class="span12">
+                                {% for cardList in column.get_deck_card_lists() %}
+                                {% if cardList.get_view_size()> 0 and cardList.get_name() != "Sideboard" %}
+                                <div style="margin-top: 10px">
+                                    <h4 class="cardlist-name">{{ cardList.get_name() }}</h4>
+                                    {% set cards = cardList.get_cards() %}
+                                    {% for card in cards %}
+                                        <div class="inline">
+                                            <span onmouseover="debugger;hideElement(this.firstElementChild);showElement(this.lastElementChild);showElement(this.children[1])"
+                                                 onmouseout="hideElement(this.lastElementChild);hideElement(this.children[1]);showElement(this.firstElementChild)"  >
+                                                <span class="">{{ cardList.get_count(card) }}x </span>
+                                                <a class="hidden"  href='javascript:moveToSidedeck({{ cards[card].get_id() }})'><i class="icon-hand-right blue"></i></a>
+                                                <a class="hidden"  href='javascript:removeCard({{ cards[card].get_id() }})'><i class="icon-remove red"></i></a>
+                                            </span>
+                                            <span onmouseover="showImage('{{ cards[card].get_image_url() }}',this)"
+                                                  onmouseout="hideImage()" class="card-in-deck" >{{ card }}</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </span>
+                        </div>
+                    </span>
+                    {% endfor %}
+                </div>
+                <div class="row-fluid">
+                    <span class="span12 inline text-left">
+                        <span id="addCardToDeckBtn" style="padding: 10px">
+                            <i class="btn-large icon-plus-sign" style="padding: 11px"
+                                    onmouseover="appendClassAttribute(this,'green');"
+                                    onmouseout="removeClassAttribute(this,'green')"
+                                    onclick="hideElement(this);showElement(this.nextElementSibling);showElement($('#addToDeckTbx')[0]);$('#addToDeckTbx')[0].focus()">
+                            </i>
+                            <i class="btn-large hidden icon-remove-sign" style="padding: 11px"
+                                    onmouseover="appendClassAttribute(this,'red');"
+                                    onmouseout="removeClassAttribute(this,'red')"
+                                    onclick="hideElement(this);showElement(this.previousElementSibling); hideElement($('#addToDeckTbx')[0]);">
+                            </i>
+                        </span>
+                        <input class="hidden" id="addToDeckTbx" type="text" value="" autocomplete="off">
+                    </span>
+                </div>
+            </div>
+            <span class="cardlist-column span3">
+                <div class="row-fluid">
+                    <span class="span12">
+                        {% set cardList = deck.get_sideboard() %}
+                        <div style="margin-top: 10px">
+                            <h4 class="cardlist-name">{{ cardList.get_name() }}</h4>
+                            {% if cardList.get_view_size() == 0 %}
+                                empty
+                            {% endif %}
+                            {% set cards = cardList.get_cards() %}
+                            {% for card in cards %}
+                                <div class="inline">
+                                    <span onmouseover="debugger;hideElement(this.firstElementChild);showElement(this.lastElementChild);showElement(this.children[1])"
+                                         onmouseout="hideElement(this.lastElementChild);hideElement(this.children[1]);showElement(this.firstElementChild)"  >
+                                        <span class="">{{ cardList.get_count(card) }}x </span>
+                                        <a class="hidden"  href='javascript:promoteFromSidedeck({{ cards[card].get_id() }})'><i class="icon-hand-left blue"></i></a>
+                                        <a class="hidden"  href='javascript:removeCard({{ cards[card].get_id() }})'><i class="icon-remove red"></i></a>
+                                    </span>
+                                    <span onmouseover="showImage('{{ cards[card].get_image_url() }}',this)"
+                                          onmouseout="hideImage()" class="card-in-deck" >{{ card }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </span>
+                </div>
+            </span>
+        </div>
+    </div>
+    <style>
+        .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+        .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+        .autocomplete-selected { background: #F0F0F0; }
+        .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+    </style>
+    <script type="text/javascript">
+        $('#addToDeckTbx').autocomplete({
+            serviceUrl: '/autocomplete/{{ user.get_id() }}/addToDeck/{{ deck.get_name() }}',
+            onSelect: function (suggestion) {
+                debugger;
+                addToDeck(suggestion.data)
+            }
+        });
+
+        function addToDeck(id){
+                var url = '/{{ user.get_id() }}/deck/{{ deck.name }}/addToDeck/'+id;
+                var f = $('#defaultForm')[0];
+                f.action = url;
+                f.submit();
+        }
+        function removeCard(id){
+            var url = '/{{ user.get_id() }}/deck/{{ deck.name }}/removeCard/'+id;
+            var f = $('#defaultForm')[0];
+            f.action = url;
+            f.submit();
+        }
+        function moveToSidedeck(id){
+                var url = '/{{ user.get_id() }}/deck/{{ deck.name }}/moveToSidedeck/'+id;
+                var f = $('#defaultForm')[0];
+                f.action = url;
+                f.submit();
+        }
+        function promoteFromSidedeck(id){
+                var url = '/{{ user.get_id() }}/deck/{{ deck.name }}/removeFromSidedeck/'+id;
+                var f = $('#defaultForm')[0];
+                f.action = url;
+                f.submit();
+        }
+    </script>
+{% endblock %}
+
+{% block right %}
+
+        <div class="divider"></div>
+
+        <div class="aside-buttons" id="deckBtns">
+{#            {% for deck in user.get_decks() %}#}
+{#                <button id="{{ deck }}Btn" onclick="deckBtnClicked(this)" title="" class="btn btn-info">{{ deck }}</button>#}
+{#            {% endfor %}#}
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="aside-buttons">
+{#            <button onclick="tradeBtnClicked(this)"title="" class="btn btn-warning special">Trade</button>#}
+{#            <button onclick="recycleBtnClicked(this)"title="" class="btn btn-danger special">Recyce</button>#}
+        </div>
+
+        <div class="divider"></div>
+
+        <dit class="aside-buttons">
+{#            <button id="okBtn" onclick="okButtonClicked()"  title="" class="btn btn-success specal hidden">OK</button>#}
+        </dit>
+
+{% endblock %}

@@ -1,0 +1,307 @@
+{% extends "master.html" %}
+{% block content %}
+
+        {% include 'snippets/message-box.html' with context %}
+
+        <!--<div class="divider"></div>-->
+        <div class="divider"></div>
+
+        <style>
+            .card-panel td{
+                padding: 3px;
+            }
+        </style>
+        {% set card =user.get_undetermined_card() %}
+        <div>
+            <div class="message-container">
+                <div class="message-control-panel text-center">
+                    <span id="cardStatus" class="badge badge-inverse pull-right">undetermined</span>
+                    <h4><span style="padding-top: 5px; padding-bottom: 4px" class="badge badge-info">{{ user.get_undetermined_cards_count() }}</span> Undetermined cards </h4>
+                </div>
+                <div class="">
+                    <div class="inner-spacer widget-content-padding row-fluid">
+                        <div class="span6">
+                            <img src="{{ card.get_image_url() }}" >
+                        </div>
+                        <div class="span6">
+                            <div class="well" style=" margin-right: 10%">
+                                <table class="card-panel">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>Card Id:</strong>
+                                            </td>
+                                            <td>
+                                                <span id="idLabel">{{ card.get_id() }}</span><br>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Card name:</strong>
+                                            </td>
+                                            <td>
+                                                <span id="nameLabel">{{ card.get_name() }}</span><br>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Rarity:</strong>
+                                            </td>
+                                            <td>
+                                                <span id="rarityLabel">{{ card.get_rarity() }}</span><br>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                 <strong>TwoSided:</strong>
+                                            </td>
+                                            <td>
+                                                <span id="twoSidedLabel">{{ card.is_two_sided() }}</span><br>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Owner:</strong>
+                                            </td>
+                                            <td>
+                                                <span id="ownerLabel">{{ card.get_owner_name() }}</span><br>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Date created:</strong>
+                                            </td>
+                                            <td>
+                                                <span id="dateLabel">{{ card.get_creation_date_string() }}</span><br>
+                                            </td>
+                                        </tr>
+                                     </tbody>
+                                </table>
+                            </div>
+                            <div class="well" style="margin-top:20px;margin-right: 10%">
+                                <span><strong>Decks:</strong></span>
+                                <span id="decksList"></span>
+                            </div>
+                            <div class="well" style="margin-top:20px;margin-right: 10%">
+                                <span><strong>Interested:</strong></span>
+                                <span style="display: inline">
+                                    {% for name in card.get_interested() %}
+                                    <span class="badge badge-success special">{{ name }}</span>
+                                    {% endfor %}
+                                </span>
+                            </div>
+                            <div class="well" style="margin-top:20px;margin-right: 10%">
+                                <span><strong>Hate:</strong></span>
+                                <span style="display: inline">
+                                    {% for name in card.get_haters() %}
+                                    <span class="badge badge-important special">{{ name }}</span>
+                                    {% endfor %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form id="okForm" method="post" action="/callback/classifyCard/{{ card.get_id() }}">
+            <input type="hidden" id="okFormTags" name="tags" value="">
+        </form>
+{% endblock %}
+
+{% block right %}
+
+        <dit class="aside-buttons">
+            <div class="controls">
+                <form action="/callback/createDeck" method="post" id="createDeckForm">
+                    <div class="input-append">
+                        <input id = "createDeckInput"name = "deckName" type="text" class="colorpicker-input" value="create deck here..." onclick="this.value=''">
+                        <span class="add-on" onclick="$('#createDeckForm')[0].submit()"><i class="cus-add"></i></span>
+                    </div>
+                </form>
+            </div>
+        </dit>
+
+        <div class="divider"></div>
+
+        <div class="aside-buttons" id="deckBtns">
+            {% for deck in user.get_decks() %}
+                <button id="{{ deck }}Btn" onclick="deckBtnClicked(this)" title="" class="btn btn-info">{{ deck }}</button>
+            {% endfor %}
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="aside-buttons">
+            <button onclick="tradeBtnClicked(this)"title="" class="btn btn-warning special">Trade</button>
+            <button onclick="recycleBtnClicked(this)"title="" class="btn btn-danger special">Recyce</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <dit class="aside-buttons">
+            <button id="okBtn" onclick="okButtonClicked()"  title="" class="btn btn-success specal hidden">OK</button>
+        </dit>
+
+
+        <script type="text/javascript">
+{#            $(document).ready(function() {#}
+{#                document.onkeyup = function (e) {keypressed(e);}#}
+{#            });#}
+
+            document.onkeyup = function (e) {keypressed(e);};
+
+            function deckBtnClicked(button){
+                first_key=false;
+                var deckName = button.innerHTML;
+                if (deckName.startsWith("("))
+                    deckName = deckName.substr(3);
+                var decksList = $('#decksList')[0];
+                if (decksList.querySelector('#'+deckName+'Badge')==null){
+                    appendDeckBadge(decksList,deckName);
+                    greenBtn(button);
+                } else{
+                    removeDeckBadge(decksList, deckName);
+                    blueBtn(button);
+                }
+                button.blur();
+                if(decksList.lastChild)
+                    setCardStatus("using");
+                else
+                    setCardStatus("undetermined")
+            }
+
+            function removeDeckBadge(container, deckName){
+                var badge = container.querySelector('#'+deckName+'Badge');
+                container.removeChild(badge);
+            }
+
+            function appendDeckBadge(container,deckName){
+                var badge = createDeckBadge(deckName);
+                container.appendChild(badge);
+            }
+
+            function createDeckBadge(deckName){
+                var span = document.createElement('span');
+                span.className = 'badge badge-info special';
+                span.innerHTML = deckName;
+                span.id  = deckName+"Badge";
+                //<span class="badge badge-info special">xxx</span>
+                return span;
+            }
+
+            function tradeBtnClicked(){
+                first_key=false;
+                clearDecksList();
+                setCardStatus("trade");
+            }
+
+            function recycleBtnClicked(){
+                first_key=false;
+                clearDecksList();
+                setCardStatus("recycle");
+            }
+
+            function clearDecksList(){
+                var decksList = $('#decksList')[0];
+                while (decksList.lastChild) {
+                    var deck_name = decksList.lastChild.innerHTML;
+                    var btn = $('#'+deck_name+"Btn")[0];
+                    blueBtn(btn);
+                    decksList.removeChild(decksList.lastChild);
+                }
+            }
+
+            function blueBtn(button){
+                removeClassAttribute(button, "btn-success");
+                appendClassAttribute(button, "btn-info");
+            }
+
+            function greenBtn(button){
+                removeClassAttribute(button, "btn-info");
+                appendClassAttribute(button, "btn-success");
+            }
+
+            function getCardStatus(){
+                return  $('#cardStatus')[0].innerHTML;
+            }
+
+            function setCardStatus(status){
+                var badge = $('#cardStatus')[0];
+                removeClassAttribute(badge, "badge-warning");
+                removeClassAttribute(badge, "badge-info");
+                removeClassAttribute(badge, "badge-important");
+                removeClassAttribute(badge, "badge-inverse");
+                if (status == "trade"){
+                    appendClassAttribute(badge,"badge-warning");
+                    showOKButton();
+                } else if (status == "recycle"){
+                    appendClassAttribute(badge,"badge-important");
+                    showOKButton();
+                } else if (status == "using"){
+                    appendClassAttribute(badge,"badge-info");
+                    showOKButton();
+                } else if (status == 'undetermined'){
+                    appendClassAttribute(badge,"badge-inverse");
+                    hideOKButton();
+                }
+                badge.innerHTML = status;
+            }
+
+        function keypressed(e){
+            var keyCode = e.which;
+            if (first_key && keyCode==13) {first_key=false;return;}
+            first_key = false;
+            var focusedElement = document.activeElement;
+            if (focusedElement.id!="createDeckInput"){
+                if (keyCode==13){
+                    //enter pressed
+                    okButtonClicked();
+                }
+                if(keyCode>=48 && keyCode<=57){
+                    //number pressed
+                    var index = keyCode - 49;
+                    if (index == -1) index = 9;
+                    var btn = $('#deckBtns')[0].children[index];
+                    if(btn!=null){
+                        deckBtnClicked(btn);
+                    }
+                }
+                if (keyCode==84){
+                    // t pressed
+                    tradeBtnClicked();
+                }
+                if (keyCode==82){
+                    // r pressed
+                    recycleBtnClicked();
+                }
+                debugger;
+            }
+        }
+        var first_key=true;
+        function okButtonClicked(){
+            var status = getCardStatus();
+            var l = [];
+            if (status!='undetermined'){
+                if (status=="using"){
+                    var decksList = $('#decksList')[0];
+                    var badges = decksList.children;
+                    for(var i =0; i<badges.length; i++)
+                        l.push(badges[i].innerHTML);
+                } else {
+                    l.push(status);
+                }
+            }
+            $('#okFormTags')[0].value = JSON.stringify(l);
+            $('#okForm')[0].submit();
+        }
+
+        function hideOKButton(){
+            hideElement($('#okBtn')[0]);
+        }
+
+        function showOKButton(){
+            showElement($('#okBtn')[0]);
+        }
+        </script>
+{% endblock %}

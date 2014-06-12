@@ -1,0 +1,254 @@
+{% extends "master.html" %}
+{% block content %}
+            <h1 id="page-header">My Cards</h1>
+
+            <h4><span id="cardNameLbl"></span></h4>
+            <div class="row-fluid">
+                <div class="span6">
+                    <div id = "cardImage">
+                        <img  src="">
+                    </div>
+                </div>
+                <div class="span6">
+                    <table>
+                        <tr>
+                            <td>My rating</td>
+                            <td><span id = "myRatingLbl" style="font-size: 20px">
+                                <i class="icon-refresh red hidden"></i>
+                                <i class="icon-star green"></i>
+                                <i class="icon-star green"></i>
+                                <i class="icon-star-empty"></i>
+                                <i class="icon-star-empty"></i>
+                                <i class="icon-star-empty"></i>
+                            </span></td>
+                        </tr>
+                        <tr>
+                            <td>Average rating</td>
+                            <td><span id="averageRatingLbl"></span></td>
+                        </tr>
+                        <tr>
+                            <td>owner</td>
+                            <td><span id = "ownerLbl" style="font-size: 20px"></span></td>
+                        </tr>
+                        <tr>
+                            <td><img id="loader" class="hidden" src="static/img/loaders/loader.gif" alt="loader"></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+{% endblock %}
+
+{% block right %}
+        <!--<div class="divider"></div>-->
+        <style>
+                li {
+                    border:1px solid;padding:2px;
+                    /*background-color: #333333;*/
+                    padding: 3px;
+                }
+                li.list-selected{
+                    background-color: #3b9e3b;
+                }
+        </style>
+        <div>
+            <div class="pull-right" id="scroller" style="border:1px solid;padding:2px;height:526px;width:auto">
+                <div id ="scrollerPoint"><i class="cus-shading"></i></div>
+            </div>
+            <ul id = "cardsList" style = "list-style-type: none;margin-top:100px;height:532px;overflow-y: scroll">
+                {% for card in user.getMyCards(sort="ratings.average") %}
+                <li class="" id = "listItem_{{card.id}}">
+                    <a href="javascript:setSelectionByClick('{{card.id}}');" title="">
+                        {{card.getName()}}
+                    </a>
+                    <input class="index" type="hidden" id="index_{{card.id}}" value="{{card.index}}">
+                    <input class="id" type="hidden" id="id_{{card.id}}" value="{{card.id}}">
+                    <input class="name" type="hidden" id="name_{{card.id}}" value="{{card.info.name}}">
+                    <input class="cardOwner" type="hidden" id="cardOwner_{{card.id}}" value='{{card["owner"]}}'>
+                    <input class="url" type="hidden" id="url_{{card.id}}" value="{{card.info.downloadLink}}">
+                    <input class="myRating" type="hidden" id="myRating_{{card.id}}" value="{{card.getMyRating()}}">
+                    <input class="averageRating" type="hidden" id="averageRating_{{card.id}}" value="{{card.getAverageRating()}}">
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+         <!--end aside buttons -->
+    <script>
+        var working =false;
+        var metadown = false;
+        document.onkeyup = function(e){
+            if(e.keyIdentifier == "Meta")
+                metadown = false;
+        }
+        document.onkeydown = function (e){
+            if(working) return false;
+            if(metadown) return true;
+            if (e.keyIdentifier == "Meta"){
+                metadown = true ;
+            }
+            n = e.keyCode;
+            if(n>48 && n<54)
+                setRating(n-48);
+            switch(n)
+            {
+                case 37:                    // left key
+                    changeRating(-1);
+                    break;
+                case 38:                    // up key
+                    var lil = document.getElementsByClassName("list-selected");
+                    var li = lil[0];
+                    n = li.previousElementSibling;
+                    if(n!=null)
+                        changeSelection(li,n);
+                    break;
+                    break;
+                case 39:                     //right key
+                    changeRating(1);
+                    break;
+                case 40:                     //down key
+                    var lil = document.getElementsByClassName("list-selected");
+                    var li = lil[0];
+                    n = li.nextElementSibling;
+                    if(n!=null)
+                        changeSelection(li,n);
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+        function changeSelection(oldSelection, newSelection){
+            if(oldSelection!='undefined')
+                oldSelection.className = "";
+            newSelection.className = "list-selected";
+            var cardNameLbl = document.getElementById("cardNameLbl");
+            var cardImage = document.getElementById('cardImage');
+            var myRatingLbl = document.getElementById('myRatingLbl');
+            var averageRatingLbl = document.getElementById('averageRatingLbl');
+            document.getElementById("ownerLbl").innerHTML = getSelectionAttribute("cardOwner");
+            cardNameLbl.innerHTML = getSelectionAttribute("name");
+            setRatingStars( getSelectionAttribute("myRating"));
+            averageRatingLbl.innerHTML = getSelectionAttribute("averageRating");
+            cardImage.style.backgroundImage ="url(" +getSelectionAttribute("url")+")";
+            moveList();
+        }
+        function changeRating(c){
+            var value = c+parseInt(getSelectionAttribute("myRating"));
+            setRating(value);
+        }
+        function setRating(value){
+            var userName = "{{user.userName}}";
+            path = "/setRating/"+userName+"/"+getSelectionAttribute("name")+"/"+value+"/"+getSelectionAttribute("index")+"/"+getSelectionAttribute("id");
+            callback = function(){
+                if (xmlhttp.readyState==4 && xmlhttp.status==200){
+                    var r = JSON.parse(xmlhttp.response);
+                    list = document.getElementById("cardsList");
+                    for (var i=0;i<list.childElementCount;i++){
+                        var el =list.children[i];
+                        if(el.getElementsByClassName("name")[0].value == r.name){
+                            el.getElementsByClassName("myRating")[0].value = r.myRating
+                            el.getElementsByClassName("averageRating")[0].value = r.averageRating
+                        }
+                        if(i == r.index)
+                            el.className = "list-selected"
+                    }
+                    refreshCardPane();
+                    working=false;
+                    loader();
+                    debugger;
+                }
+            };
+            sendAjaxRequest(path, "POST", callback);
+        }
+        function sendAjaxRequest(path, method, callback){
+            xmlhttp=new XMLHttpRequest();
+            xmlhttp.onreadystatechange=callback
+            xmlhttp.open(method,path,true);
+            working = true;
+            loader();
+            xmlhttp.send();
+        }
+        function refreshCardPane(){
+            setRatingStars(getSelectionAttribute("myRating"));
+            document.getElementById("averageRatingLbl").innerHTML = getSelectionAttribute("averageRating");
+        }
+        function setRatingStars(rating){
+            rating = parseInt(rating);
+            if(!(rating<=5 && rating>=-1)) return;
+            var span = document.getElementById("myRatingLbl");
+            span.children[0].className = rating<0? "icon-trash red": "hidden";
+            for (var i = 1; i<=5;i++)
+                span.children[i].className = rating>=0? rating>=i?"icon-star yellow":"icon-star-empty": "hidden";
+        }
+        function getCardsListSize(){
+            var list = document.getElementById("cardsList");
+            return list.childElementCount;
+        }
+        function getSelectedIndex(){
+            var selectedElement = getSelectedEement();
+            var index = getSelectionAttribute("index");
+            return index;
+        }
+        function getSelectedEement(){
+            var selectedElement = list.getElementsByClassName("list-selected")[0];
+            return selectedElement;
+        }
+        function getSelectionAttribute(attribute){
+            var selectedElement = getSelectedEement();
+            var val = selectedElement.getElementsByClassName(attribute)[0].value;
+            return val;
+        }
+        function setSelectionAttribute(attribute, val){
+            var selectedElement = getSelectedEement();
+            var f = selectedElement.getElementsByClassName(attribute)[0]
+            f.value=val;
+        }
+        function moveList(){
+            var selectedIndex= getSelectedIndex();
+            var size = getCardsListSize();
+            m = 18/2;
+            if (selectedIndex<=m || size - selectedIndex<=m) return;
+            showListElementsBetween(selectedIndex-9, selectedIndex+8);
+            setScroller(selectedIndex,size);
+        }
+        function showListElementsBetween(s,e){
+            var list = document.getElementById("cardsList");
+            var size = list.childElementCount;
+            for (var i = 0; i<size; i++){
+                var el = list.children[i];
+                if(i>s && i<=e+1){
+                    if (el.className!="list-selected")
+                        el.className = "";
+                }
+                else
+                    el.className = "hidden";
+            }
+        }
+        function setScroller(selectedIndex,size){
+            var div = document.getElementById("scroller");
+            var pointer = div.firstElementChild;
+            var emptySpace = div.clientHeight-6-pointer.clientHeight;
+            var m = selectedIndex*emptySpace/size;
+            debugger;
+            pointer.style.marginTop = parseInt(m)+"px"
+        }
+        function setSelectionByClick(senderId){
+            var next = document.getElementById("listItem_"+senderId);
+            if(next.className == "list-selected"){
+                next.className == "";
+                return;
+            }
+            var prev = getSelectedEement();
+            changeSelection(prev,next);
+        }
+        function loader(){
+            var l = document.getElementById("loader");
+            if (working)
+                l.className = "";
+            else
+                l.className = "hidden";
+        }
+        var list = document.getElementById("cardsList");
+        changeSelection(list.firstElementChild,list.firstElementChild);
+    </script>
+{% endblock %}

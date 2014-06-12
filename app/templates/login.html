@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <title>MagicApp</title>
+    <meta name="description" content="">
+    <meta name="author" content=Obee"">
+    
+	<!-- http://davidbcalhoun.com/2010/viewport-metatag -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!--// CSS FILES //-->   
+	<link rel="stylesheet" href="static/css/master-css.min.css">
+
+	<!-- // THEME CSS changed by javascript: the CSS link below will override the rules above // -->
+	<!-- For more information, please see the documentation for "THEMES" -->
+    <!--<link rel="stylesheet" id="switch-theme-js" href="static/css/themes/default.css?v=1">-->
+
+   	<!-- To switch to full width -->
+    <link rel="stylesheet" id="switch-width" href="static/css/full-width.css?v=1">
+
+	<!-- Webfonts -->
+	<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Lato:300,400,700' type='text/css'>
+
+	<!-- All javascripts are located at the bottom except for HTML5 Shim -->
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+   		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+   		<script src="static/js/include/respond.min.js"></script>
+   	<![endif]-->
+
+      <!-- For everything else -->
+	<link rel="shortcut icon" href="img/favicons/favicon.ico">
+  </head>
+
+  <body>
+  	<!-- .height-wrapper -->
+	<div class="height-wrapper">
+
+		<!-- header -->
+		<header>
+			<!-- tool bar -->
+			<div id="header-toolbar" class="container-fluid">
+				<!-- .contained -->
+				<div class="contained">
+
+					<!-- theme name -->
+					<h1> <span class="hidden-phone">MagicApp</span> </h1>
+					<!-- end theme name -->
+
+					<!-- end span4 -->
+				</div>
+				<!-- end .contained -->
+			</div>
+			<!-- end tool bar -->
+
+		</header>
+		<!-- end header -->
+			<div id="login-logo">
+
+			</div>
+			<div class="jarviswidget login">
+				<header>
+					<h2>MagicApp - Authentication</h2>
+				</header>
+
+					<div class="widget alert alert-info adjusted">
+						<i class="cus-exclamation"></i>
+						<strong>Please type in your username and password.</strong>
+					</div>
+					<!-- content goes here -->
+					<div id="main-content">
+
+						<form class="form-signin" id="target" action="/login" method="POST">
+							<div class="control-group">
+								<input name="username" type="text" class="input-block-level" autofocus placeholder="Username" value="Admin">
+							</div>
+							<div class="control-group">
+								<input name="password" type="password" class="input-block-level" placeholder="Password" value="admin">
+							</div>
+							<div class="control-group no-border">
+								<div style="text-align: right;">
+									<input class="btn btn-primary" type="submit" value="Sign in" id="login-btn">
+								</div>
+							</div>
+						</form>
+
+					</div>
+					<!-- end content goes here -->
+
+			</div>
+
+	</div>
+	<!-- end .height-wrapper -->
+
+	<!-- footer -->
+
+	<!-- if you like you can insert your footer here -->
+
+	<!-- end footer -->
+
+    <!--================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!---->
+    <!--&lt;!&ndash; Link to Google CDN's jQuery + jQueryUI; fall back to local &ndash;&gt;-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+    <!--<script>window.jQuery || document.write('<script src="static/js/libs/jquery.min.js"><\/script>')</script>-->
+    	<!--&lt;!&ndash; OPTIONAL: Use this migrate scrpit for plugins that are not supported by jquery 1.9+ &ndash;&gt;-->
+		<!--&lt;!&ndash; DISABLED <script src="static/js/libs/jquery.migrate-1.0.0.min.js"></script> &ndash;&gt;-->
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>-->
+    <!--<script>window.jQuery.ui || document.write('<script src="static/js/libs/jquery.ui.min.js"><\/script>')</script>-->
+
+    <!--&lt;!&ndash; IMPORTANT: Jquery Touch Punch is always placed under Jquery UI &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.ui.touch-punch.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Mobile responsive menu generator &ndash;&gt;-->
+	<!--<script src="static/js/include/selectnav.min.js"></script>-->
+
+	<!--&lt;!&ndash; REQUIRED: Datatable components &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.accordion.min.js"></script>-->
+
+	<!--&lt;!&ndash; REQUIRED: Toastr & Jgrowl notifications  &ndash;&gt;-->
+    <!--<script src="static/js/include/toastr.min.js"></script>-->
+    <!--<script src="static/js/include/jquery.jgrowl.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Sleek scroll UI  &ndash;&gt;-->
+    <!--<script src="static/js/include/slimScroll.min.js"></script>-->
+
+	<!--&lt;!&ndash; REQUIRED: Datatable components &ndash;&gt;-->
+	<!--<script src="static/js/include/jquery.dataTables.min.js"></script>-->
+	<!--<script src="static/js/include/DT_bootstrap.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Form element skin  &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.uniform.min.js"></script>-->
+
+	<!--&lt;!&ndash; REQUIRED: AmCharts  &ndash;&gt;-->
+    <!--<script src="static/js/include/amchart/amcharts.js"></script>-->
+	<!--<script src="static/js/include/amchart/amchart-draw1.js"></script>-->
+
+	<!--<script type="text/javascript">-->
+		<!--var ismobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));-->
+	    <!--if(!ismobile){-->
+
+	    	<!--/** ONLY EXECUTE THESE CODES IF MOBILE DETECTION IS FALSE **/-->
+
+	    	<!--/* REQUIRED: Datatable PDF/Excel output componant */-->
+
+	    	<!--document.write('<script src="static/js/include/ZeroClipboard.min.js"><\/script>');-->
+	    	<!--document.write('<script src="static/js/include/TableTools.min.js"><\/script>');-->
+	    	<!--document.write('<script src="static/js/include/select2.min.js"><\/script>');-->
+	    	<!--document.write('<script src="static/js/include/jquery.excanvas.min.js"><\/script>');-->
+	    	<!--document.write('<script src="static/js/include/jquery.placeholder.min.js"><\/script>');-->
+
+			<!--/** DEMO SCRIPTS **/-->
+	        <!--$(function() {-->
+	            <!--/* jarvis tooltips */-->
+				<!--$.jGrowl("No authentication is needed <strong>press</strong> on <strong>Sign in</strong> to continue...", {-->
+					<!--header: 'Hey there stranger!',-->
+					<!--sticky: false,-->
+					<!--life: 5000,-->
+					<!--speed: 500,-->
+					<!--theme: 'with-icon',-->
+					<!--position: 'top-right', //this is default position-->
+					<!--easing: 'easeOutBack',-->
+					<!--animateOpen: {-->
+						<!--height: "show"-->
+					<!--},-->
+					<!--animateClose: {-->
+						<!--opacity: 'hide'-->
+					<!--}-->
+				<!--});-->
+	        <!--});-->
+
+	    <!--}else{-->
+
+	    	<!--/** ONLY EXECUTE THESE CODES IF MOBILE DETECTION IS TRUE **/-->
+
+	    	<!--document.write('<script src="static/js/include/responsive-tables.min.js"><\/script>');-->
+	    <!--}-->
+	<!--</script>-->
+
+	<!--&lt;!&ndash; REQUIRED: iButton &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.ibutton.min.js"></script>-->
+
+	<!--&lt;!&ndash; REQUIRED: Justgage animated charts &ndash;&gt;-->
+	<!--<script src="static/js/include/raphael.2.1.0.min.js"></script>-->
+    <!--<script src="static/js/include/justgage.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Morris Charts &ndash;&gt;-->
+    <!--<script src="static/js/include/morris.min.js"></script>-->
+    <!--<script src="static/js/include/morris-chart-settings.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Animated pie chart &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.easy-pie-chart.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Functional Widgets &ndash;&gt;-->
+    <!--<script src="static/js/include/jarvis.widget.min.js"></script>-->
+    <!--<script src="static/js/include/mobiledevices.min.js"></script>-->
+    <!--&lt;!&ndash; DISABLED (only needed for IE7 <script src="static/js/include/json2.js"></script> &ndash;&gt;-->
+
+	<!--&lt;!&ndash; REQUIRED: Full Calendar &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.fullcalendar.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Flot Chart Engine &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.flot.cust.min.js"></script>-->
+    <!--<script src="static/js/include/jquery.flot.resize.min.js"></script>-->
+    <!--<script src="static/js/include/jquery.flot.tooltip.min.js"></script>-->
+    <!--<script src="static/js/include/jquery.flot.orderBar.min.js"></script>-->
+    <!--<script src="static/js/include/jquery.flot.fillbetween.min.js"></script>-->
+    <!--<script src="static/js/include/jquery.flot.pie.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Sparkline Charts &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.sparkline.min.js"></script>-->
+
+	<!--&lt;!&ndash; REQUIRED: Infinite Sliding Menu (used with inbox page) &ndash;&gt;-->
+	<!--<script src="static/js/include/jquery.inbox.slashc.sliding-menu.js"></script>-->
+
+	<!--&lt;!&ndash; REQUIRED: Form validation plugin &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.validate.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Progress bar animation &ndash;&gt;-->
+    <!--<script src="static/js/include/bootstrap-progressbar.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: wysihtml5 editor &ndash;&gt;-->
+    <!--<script src="static/js/include/wysihtml5-0.3.0.min.js"></script>-->
+    <!--<script src="static/js/include/bootstrap-wysihtml5.min.js"></script>-->
+
+	<!--&lt;!&ndash; REQUIRED: Masked Input &ndash;&gt;-->
+    <!--<script src="static/js/include/jquery.maskedinput.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Bootstrap Date Picker &ndash;&gt;-->
+    <!--<script src="static/js/include/bootstrap-datepicker.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Bootstrap Wizard &ndash;&gt;-->
+    <!--<script src="static/js/include/bootstrap.wizard.min.js"></script>-->
+
+	<!--&lt;!&ndash; REQUIRED: Bootstrap Color Picker &ndash;&gt;-->
+    <!--<script src="static/js/include/bootstrap-colorpicker.min.js"></script>-->
+
+
+	<!--&lt;!&ndash; REQUIRED: Bootstrap Time Picker &ndash;&gt;-->
+    <!--<script src="static/js/include/bootstrap-timepicker.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Bootstrap Prompt &ndash;&gt;-->
+    <!--<script src="static/js/include/bootbox.min.js"></script>-->
+
+    <!--&lt;!&ndash; REQUIRED: Bootstrap engine &ndash;&gt;-->
+    <!--<script src="static/js/include/bootstrap.min.js"></script>-->
+
+    <!-- DO NOT REMOVE: Theme Config file -->
+    <script src="static/js/config.js"></script>
+  </body>
+</html>
